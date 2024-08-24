@@ -2,14 +2,12 @@ import React, { useState } from 'react';
 import axios from 'axios';
 // Suggested initial states
 const initialMessage = '';
-const initialError = '';
 const initialEmail = '';
 const initialSteps = 0;
 const initialIndex = 4; // the index the "B" is at, corresponding to coordinates (2, 2) in a 3x3 grid.
 
 export default function AppFunctional(props) {
   const [message, setMessage] = useState(initialMessage);
-  const [error, setError] = useState(initialError);
   const [email, setEmail] = useState(initialEmail);
   const [steps, setSteps] = useState(initialSteps);
   const [index, setIndex] = useState(initialIndex);
@@ -79,7 +77,10 @@ export default function AppFunctional(props) {
   }
 
   function onChange(evt) {
-    setEmail(evt.target.value);
+    const {id, value} = evt.target;
+    if (id === 'email') {
+      setEmail(value);
+    }
   }
 
   function onSubmit(evt) {
@@ -91,7 +92,7 @@ export default function AppFunctional(props) {
       setMessage(res.data.message);
 
     }).catch (err => {
-      setError(err.response.data.message);
+      setMessage(err.response.data.message);
       console.log(err);
     });
     // Add the logic to send a POST request with the email and other data if needed.
@@ -102,7 +103,7 @@ export default function AppFunctional(props) {
     <div id="wrapper" className={props.className}>
       <div className="info">
         <h3 id="coordinates">{getXYMessage()}</h3>
-        <h3 id="steps">You moved {steps} times</h3>
+        <h3 id="steps">You moved {steps} {steps !== 1 ? "times" : "time"}</h3>
       </div>
       <div id="grid">
         {grid.map((idx) => (
