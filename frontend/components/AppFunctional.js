@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-
+import axios from 'axios';
 // Suggested initial states
 const initialMessage = '';
+const initialError = '';
 const initialEmail = '';
 const initialSteps = 0;
 const initialIndex = 4; // the index the "B" is at, corresponding to coordinates (2, 2) in a 3x3 grid.
 
 export default function AppFunctional(props) {
   const [message, setMessage] = useState(initialMessage);
+  const [error, setError] = useState(initialError);
   const [email, setEmail] = useState(initialEmail);
   const [steps, setSteps] = useState(initialSteps);
   const [index, setIndex] = useState(initialIndex);
@@ -50,13 +52,29 @@ export default function AppFunctional(props) {
   }
 
   function move(evt) {
+    const direction = evt.target.id;
     const newIndex = getNextIndex(evt.target.id);
     if (newIndex !== index) {
       setIndex(newIndex);
       setSteps(steps + 1);
       setMessage('');
     } else {
-      setMessage("You can't go that way");
+      switch (direction) {
+        case 'left':
+          setMessage("You can't go left");
+          break;
+        case 'right':
+          setMessage("You can't go right");
+          break;
+        case 'up':
+          setMessage("You can't go up");
+          break;
+        case 'down':
+          setMessage("You can't go down");
+          break;
+        default:
+          setMessage('invalid direction');
+      }
     }
   }
 
@@ -65,10 +83,18 @@ export default function AppFunctional(props) {
   }
 
   function onSubmit(evt) {
+    const { x, y } = getXY();
     evt.preventDefault();
-    setMessage(email);
+    axios.post('http://localhost:9000/api/result', { email, steps, x, y })
+    .then (res => {
+      setEmail(initialEmail); 
+      setMessage(res.data.message);
+
+    }).catch (err => {
+      setError(err.response.data.message);
+      console.log(err);
+    });
     // Add the logic to send a POST request with the email and other data if needed.
-    console.log('Submitted:', { email, steps, coordinates: getXY() });
   }
   
 
