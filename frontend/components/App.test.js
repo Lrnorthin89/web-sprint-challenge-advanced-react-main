@@ -34,8 +34,8 @@ test('renders all the buttons', () => {
 });
 
 test('input value changes on typing', () => {
-  const { getByLabelText } = render(<AppFunctional />);
-  const input = getByLabelText(/email/i); // Assuming the input is labeled with "Email"
+  const { getByText } = render(<AppFunctional />);
+  const input = getByText(/email/i); // Assuming the input is labeled with "Email"
   
   // Simulate typing into the input field
   fireEvent.change(input, { target: { value: 'test@example.com' } });
@@ -50,18 +50,98 @@ test('displays the initial coordinates correctly', () => {
   expect(coordinates).toBeInTheDocument();
 });
 
-test('resets the game state when the reset button is clicked', () => {
-  const { getByText, getByLabelText } = render(<AppFunctional />);
-  
- 
-  
-  // Simulate clicking the reset button
-  fireEvent.click(resetButton);
-  
-  // Check that the input field is cleared after reset
-  expect(input.value).toBe('');
-  
-  // Check that the coordinates are reset to the initial state (assuming initial is (2, 2))
+test('displays the initial steps correctly', () => {
+  const { getByText } = render(<AppFunctional />);
+  const steps = getByText(/you moved 0 times/i);
+  expect(steps).toBeInTheDocument();
+});
+
+test('displays the initial message correctly', () => {
+  const { getByText } = render(<AppFunctional />);
+  const message = getByText(/message/i);
+  expect(message).toBeInTheDocument();
+});
+
+test('moves up when up button is clicked', () => {
+  const { getByText } = render(<AppFunctional />);
+  const upButton = getByText(/up/i);
   const coordinates = getByText(/\(2, 2\)/i);
-  expect(coordinates).toBeInTheDocument();
+  const steps = getByText(/you moved 0 times/i);
+
+  // Click the "Up" button
+  fireEvent.click(upButton);
+
+  // Check if the coordinates have been updated
+  expect(coordinates).toHaveTextContent('(2, 1)');
+
+  // Check if the steps have been updated
+  expect(steps).toHaveTextContent('You moved 1 time');
+});
+
+test('moves down when down button is clicked', () => {
+  const { getByText } = render(<AppFunctional />);
+  const downButton = getByText(/down/i);
+  const coordinates = getByText(/\(2, 2\)/i);
+  const steps = getByText(/you moved 0 times/i);
+
+  // Click the "Down" button
+  fireEvent.click(downButton);
+
+  // Check if the coordinates have been updated
+  expect(coordinates).toHaveTextContent('(2, 3)');
+
+  // Check if the steps have been updated
+  expect(steps).toHaveTextContent('You moved 1 time');
+});
+
+test('moves left when left button is clicked', () => {
+  const { getByText } = render(<AppFunctional />);
+  const leftButton = getByText(/left/i);
+  const coordinates = getByText(/\(2, 2\)/i);
+  const steps = getByText(/you moved 0 times/i);
+
+  // Click the "Left" button
+  fireEvent.click(leftButton);
+
+  // Check if the coordinates have been updated
+  expect(coordinates).toHaveTextContent('(1, 2)');
+
+  // Check if the steps have been updated
+  expect(steps).toHaveTextContent('You moved 1 time');
+});
+
+test('moves right when right button is clicked', () => {
+  const { getByText } = render(<AppFunctional />);
+  const rightButton = getByText(/right/i);
+  const coordinates = getByText(/\(2, 2\)/i);
+  const steps = getByText(/you moved 0 times/i);
+
+  // Click the "Right" button
+  fireEvent.click(rightButton);
+
+  // Check if the coordinates have been updated
+  expect(coordinates).toHaveTextContent('(3, 2)');
+
+  // Check if the steps have been updated
+  expect(steps).toHaveTextContent('You moved 1 time');
+});
+
+test('resets the game state when reset button is clicked', () => {
+  const { getByText } = render(<AppFunctional />);
+  const upButton = getByText(/up/i);
+  const resetButton = getByText(/reset/i);
+  const coordinates = getByText(/\(2, 2\)/i);
+  const steps = getByText(/you moved 0 times/i);
+
+  // Move up once
+  fireEvent.click(upButton);
+
+  // Click the "Reset" button
+  fireEvent.click(resetButton);
+
+  // Check if the coordinates have been reset
+  expect(coordinates).toHaveTextContent('(2, 2)');
+
+  // Check if the steps have been reset
+  expect(steps).toHaveTextContent('You moved 0 times');
 });
