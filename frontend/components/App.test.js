@@ -37,7 +37,10 @@ test('input value changes on typing', () => {
   const { getByLabelText } = render(<AppFunctional />);
   const input = getByLabelText(/email/i); // Assuming the input is labeled with "Email"
   
+  // Simulate typing into the input field
   fireEvent.change(input, { target: { value: 'test@example.com' } });
+  
+  // Assert that the input's value has been updated
   expect(input.value).toBe('test@example.com');
 });
 
