@@ -52,11 +52,18 @@ test('displays the initial coordinates correctly', () => {
 
 test('resets the game state when the reset button is clicked', () => {
   const { getByText, getByLabelText } = render(<AppFunctional />);
+  
+  // Find the reset button and the email input field
   const resetButton = getByText(/reset/i);
   const input = getByLabelText(/email/i);
   
+  // Simulate clicking the reset button
   fireEvent.click(resetButton);
+  
+  // Check that the input field is cleared after reset
   expect(input.value).toBe('');
+  
+  // Check that the coordinates are reset to the initial state (assuming initial is (2, 2))
   const coordinates = getByText(/\(2, 2\)/i);
   expect(coordinates).toBeInTheDocument();
 });
