@@ -15,13 +15,16 @@ test('renders the heading correctly', () => {
 
 test('renders all the buttons', () => {
   const { getByText } = render(<AppFunctional />);
+
+  // Checking if each button is rendered by looking for their text labels
   const upButton = getByText(/up/i);
   const downButton = getByText(/down/i);
   const leftButton = getByText(/left/i);
   const rightButton = getByText(/right/i);
   const resetButton = getByText(/reset/i);
   const submitButton = getByText(/submit/i);
-  
+
+  // Ensuring all buttons are present in the document
   expect(upButton).toBeInTheDocument();
   expect(downButton).toBeInTheDocument();
   expect(leftButton).toBeInTheDocument();
