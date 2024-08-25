@@ -14,7 +14,7 @@ test('renders the heading correctly', () => {
 });
 
 test('renders all the buttons and inputs', () => {
-  const { getByText, container } = render(<AppFunctional />);
+  const { getByText, getByPlaceholderText, container } = render(<AppFunctional />);
 
   const upButton = getByText(/up/i);
   const downButton = getByText(/down/i);
@@ -22,7 +22,7 @@ test('renders all the buttons and inputs', () => {
   const rightButton = getByText(/right/i);
   const resetButton = getByText(/reset/i);
   const submitButton = container.querySelector('#submit');
-  const emailInput = getByText(/email/i);
+  const emailInput = getByPlaceholderText(/type email/i); // Assuming "type email" is the placeholder text
 
   expect(upButton).toBeInTheDocument();
   expect(downButton).toBeInTheDocument();
@@ -41,4 +41,3 @@ test('displays the initial message element correctly', () => {
 });
 
 // Other tests follow...
-
