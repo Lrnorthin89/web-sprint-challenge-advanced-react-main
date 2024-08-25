@@ -2,6 +2,7 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import AppFunctional from './AppFunctional';
+// import { container } from 'webpack';
 
 test('sanity', () => { 
   expect(true).toBe(true);
@@ -22,7 +23,8 @@ test('renders all the buttons', () => {
   const leftButton = getByText(/left/i);
   const rightButton = getByText(/right/i);
   const resetButton = getByText(/reset/i);
-  const submitButton = getByText(/submit/i);
+  const message = getByText(/message/i);
+  const email = getByText(/email/i);
 
   // Ensuring all buttons are present in the document
   expect(upButton).toBeInTheDocument();
@@ -30,7 +32,8 @@ test('renders all the buttons', () => {
   expect(leftButton).toBeInTheDocument();
   expect(rightButton).toBeInTheDocument();
   expect(resetButton).toBeInTheDocument();
-  expect(submitButton).toBeInTheDocument();
+  expect(message).toBeInTheDocument();
+  expect(email).toBeInTheDocument();
 });
 
 test('input value changes on typing', () => {
@@ -132,6 +135,17 @@ test('resets the game state when reset button is clicked', () => {
   const resetButton = getByText(/reset/i);
   const coordinates = getByText(/\(2, 2\)/i);
   const steps = getByText(/you moved 0 times/i);
+
+  test ('submitting with valid email', () => {
+    const { getByText } = render(<AppFunctional />);
+    const upButton = getByText(/up/i);
+    const emailInput = getByText(/email/i);
+    // Move up once
+    fireEvent.click(upButton);
+
+    // Type in a valid email
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+  });
 
   // Move up once
   fireEvent.click(upButton);
